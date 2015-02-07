@@ -8,39 +8,32 @@ package neuralNetwork;
 
 public class TransferFunction {
 
-    public static final int SIGMOID = 0;
-    public static final int TANH = 1;
-    public static final int MIN_MAX = 2;
-    public static final int NONE = 3;
-
-    private int activateFunction;
-    private double min = -1, max = 1;
+    private FunctionType functionType;
+    private double min = -1, max = 1, range = 2;
 
 
-    public TransferFunction(int type) {
-        if (type < 0 || type > 3)
-            throw new IllegalArgumentException(type + " is not in transfer function type range 0..3");
-        activateFunction = type;
+    public TransferFunction(FunctionType type) {
+        functionType = type;
     }
 
 
-    public static TransferFunction getTransferFunction(int type) {
-        if (type < 0 || type > 3)
-            throw new IllegalArgumentException(type + " is not in transfer function type range 0..3");
+    public static TransferFunction getTransferFunction(FunctionType type) {
         TransferFunction tf = new TransferFunction(type);
         return tf;
     }
 
 
     public double activate(double x) {
-        switch (activateFunction) {
-            case SIGMOID:
+        switch (functionType) {
+            case Sigmoid:
                 return sigmoid(x);
-            case TANH:
+            case Tanh:
                 return Math.tanh(x);
-            case MIN_MAX:
+            case MinMax:
                 return minMax(x);
-            case NONE:
+            case Heaviside:
+                return heaviside(x);
+            case None:
                 return x;
             default:
                 return 0;
@@ -49,14 +42,16 @@ public class TransferFunction {
 
 
     public double activateDer(double x) {
-        switch (activateFunction) {
-            case SIGMOID:
+        switch (functionType) {
+            case Sigmoid:
                 return dSigmoid(x);
-            case TANH:
+            case Tanh:
                 return dTanh(x);
-            case MIN_MAX:
+            case MinMax:
                 return dMinMax();
-            case NONE:
+            case Heaviside:
+                return dHeaviside(x);
+            case None:
                 return 1;
             default:
                 return 0;
@@ -81,7 +76,7 @@ public class TransferFunction {
 
 
     private double minMax(double x) {
-        return (x - min)/(max - min);
+        return range*(x - min)/(max - min) - (range/2);
     }
 
 
@@ -90,16 +85,25 @@ public class TransferFunction {
     }
 
 
-    private void minMaxUpdate(double x) {
-        if (x < min) min = x;
-        if (x > max) max = x;
+    private double heaviside(double x) {
+        return (x < 0) ? 0 : 1;
     }
 
 
-    protected void setActivateFunction(int activateFunction) {
-        if (activateFunction < 0 || activateFunction > 3)
-            throw new IllegalArgumentException(activateFunction + " is not in transfer function type range 0..3");
-        this.activateFunction = activateFunction;
+    private double dHeaviside(double x) {
+        return 0;
+    }
+
+
+    protected void setMinMaxValues(double min, double max, double range) {
+        this.min = min;
+        this.max = max;
+        this.range = range;
+    }
+
+
+    protected void setActivateFunction(FunctionType type) {
+        functionType = type;
     }
 
 }

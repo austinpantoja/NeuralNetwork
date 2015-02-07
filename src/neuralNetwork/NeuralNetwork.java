@@ -3,6 +3,8 @@ package neuralNetwork;
 /**
  * Created by @author austin on 2/7/15.
  */
+
+
 public class NeuralNetwork {
 
     InputLayer inputLayer;
@@ -31,6 +33,21 @@ public class NeuralNetwork {
     public void learn(double[] error) {
         outputLayer.backPropagate(error);
         inputLayer.resetWeights();
+    }
+
+
+    public void setNeuronTransferFunction(FunctionType type) {
+        Neuron.setTransferFunction(type);
+    }
+
+
+    public void setInputTransfterFunction(FunctionType type) {
+        inputLayer.setInputTransferFunction(type);
+    }
+
+
+    public void setInputMinMaxParams(double min, double max, double range) {
+        inputLayer.setInputMinMaxParams(min, max, range);
     }
 
 

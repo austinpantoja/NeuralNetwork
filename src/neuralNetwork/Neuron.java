@@ -20,7 +20,7 @@ public class Neuron {
         for (int i = 0; i < weights.length; i++)
             weights[i] = 2*Math.random() - 1;
         if (transferFunction == null)
-            transferFunction = TransferFunction.getTransferFunction(TransferFunction.TANH);
+            setTransferFunction(FunctionType.Tanh);
     }
 
 
@@ -61,6 +61,11 @@ public class Neuron {
         weights[weights.length-1] += (learningRate*x*delta);
         for (int i = 0; i < input.length; i++)
             weights[i] += (input[i]*learningRate*x*delta);
+    }
+
+
+    public static void setTransferFunction(FunctionType type) {
+        transferFunction.setActivateFunction(type);
     }
 
 

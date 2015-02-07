@@ -6,21 +6,19 @@ package neuralNetwork;
 
 public class InputLayer {
 
-    private TransferFunction[] transferFuncs;
+    private TransferFunction transferFunction;
     private double[] input;
     private Layer outLayer;
 
     public InputLayer(int numOfInputs) {
         input = new double[numOfInputs];
-        transferFuncs = new TransferFunction[numOfInputs];
-        for (int i = 0; i < numOfInputs; i++)
-            transferFuncs[i] = new TransferFunction(TransferFunction.MIN_MAX);
+        transferFunction = new TransferFunction(FunctionType.MinMax);
     }
 
 
     public void feedForward(double[] input) {
         for (int i = 0; i < input.length; i++)
-            this.input[i] = transferFuncs[i].activate(input[i]);
+            this.input[i] = transferFunction.activate(input[i]);
         outLayer.feedForward(input);
     }
 
@@ -41,9 +39,13 @@ public class InputLayer {
     }
 
 
-    protected void setTransferFunction(int activateType) {
-        for (TransferFunction tf : transferFuncs)
-            tf.setActivateFunction(activateType);
+    protected void setInputTransferFunction(FunctionType type) {
+        transferFunction.setActivateFunction(type);
+    }
+
+
+    protected void setInputMinMaxParams(double min, double max, double range) {
+        transferFunction.setMinMaxValues(min, max, range);
     }
 
 

@@ -1,6 +1,5 @@
 package neuralNetwork;
 
-import java.util.Arrays;
 
 /**
  * Created by @author austin on 2/6/15.
